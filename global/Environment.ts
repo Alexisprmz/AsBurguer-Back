@@ -11,7 +11,7 @@ export const HOST_MYSQL: string = "localhost";
 export const PORT_MYSQL: number = 3307;
 
 // Define el nombre de usuario para la conexión a la base de datos MySQL
-export const USER_MYSQL: string = "root";
+export const USER_MYSQL: string = "admin";
 
 // Define la contraseña para el usuario de la base de datos MySQL
 export const PASSWORD_MYSQL: string = "1234";
