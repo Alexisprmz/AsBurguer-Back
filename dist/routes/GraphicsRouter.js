@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const GraphicsController_1 = require("../app/controllers/GraphicsController");
+const Middleware_1 = require("../config/server/Middleware");
+const router = (0, express_1.Router)();
+router.get('/totalSales', (0, Middleware_1.Middleware)(1), GraphicsController_1.GraphicsController.totalSales);
+router.get('/bestSeller', (0, Middleware_1.Middleware)(1), GraphicsController_1.GraphicsController.bestSeller);
+router.get('/bestClient', (0, Middleware_1.Middleware)(1), GraphicsController_1.GraphicsController.bestClient);
+router.get('/sales', (0, Middleware_1.Middleware)(1), GraphicsController_1.GraphicsController.sales);
+router.get('/avgTime', (0, Middleware_1.Middleware)(1), GraphicsController_1.GraphicsController.avgTime);
+exports.default = router;

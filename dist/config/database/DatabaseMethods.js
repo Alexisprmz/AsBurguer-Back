@@ -1,0 +1,108 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DatabaseMethods = void 0;
+const DatabaseConnection_1 = require("./DatabaseConnection");
+class DatabaseMethods {
+    static query_one(sql) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection;
+            try {
+                connection = yield (0, DatabaseConnection_1.connect)();
+                const [rows] = yield connection.execute(sql.query, sql.params);
+                const result = rows[0] || null;
+                return { error: false, msg: result };
+            }
+            catch (error) {
+                return { error: true, msg: 'error_query_one' };
+            }
+            finally {
+                if (connection)
+                    connection.end();
+            }
+        });
+    }
+    static query(sql) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection;
+            try {
+                connection = yield (0, DatabaseConnection_1.connect)();
+                const [rows] = yield connection.execute(sql.query, sql.params);
+                return { error: false, msg: rows };
+            }
+            catch (error) {
+                return { error: true, msg: 'error_query' };
+            }
+            finally {
+                if (connection)
+                    connection.end();
+            }
+        });
+    }
+    static query_with_named_params(sql) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection;
+            try {
+                connection = yield (0, DatabaseConnection_1.connect)();
+                const [rows] = yield connection.execute(sql.query, sql.params);
+                return { error: false, msg: rows };
+            }
+            catch (error) {
+                return { error: true, msg: 'error_query' };
+            }
+            finally {
+                if (connection)
+                    connection.end();
+            }
+        });
+    }
+    static save(sql) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection;
+            try {
+                connection = yield (0, DatabaseConnection_1.connect)();
+                yield connection.execute(sql.query, sql.params);
+                return { error: false, msg: 'query_executed' };
+            }
+            catch (error) {
+                return { error: true, msg: 'error_save' };
+            }
+            finally {
+                if (connection)
+                    connection.end();
+            }
+        });
+    }
+    static save_transaction(queries) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection;
+            try {
+                connection = yield (0, DatabaseConnection_1.connect)();
+                yield connection.beginTransaction();
+                for (let sql of queries) {
+                    yield connection.execute(sql.query, sql.params);
+                }
+                yield connection.commit();
+                return { error: false, msg: 'queries_executed' };
+            }
+            catch (error) {
+                if (connection)
+                    yield connection.rollback();
+                return { error: true, msg: 'error_save' };
+            }
+            finally {
+                if (connection)
+                    connection.end();
+            }
+        });
+    }
+}
+exports.DatabaseMethods = DatabaseMethods;
